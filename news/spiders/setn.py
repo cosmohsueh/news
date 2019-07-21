@@ -18,10 +18,12 @@ class SetnSpider(scrapy.Spider):
 
     def parse_page(self, response):
         target = response.xpath('//*[@id="contFix"]/div/div/div/div/div/ul/li/a/@href')[-1].extract()
+        self.logger.info("last page href: " + str(target))
         last_page = re.findall('p=(\d+)', target)[0]
 
         for i in range(1, int(last_page)):
             page_url = 'https://www.setn.com/ViewAll.aspx?PageGroupID=2&p=' + str(i)
+            self.logger.info("find page url: " + page_url)
             yield scrapy.Request(url=page_url, callback=self.parse_list)
             time.sleep(3)
 
@@ -47,6 +49,6 @@ class SetnSpider(scrapy.Spider):
             item['author'] = response.xpath('//*[@id="contFix"]/div/div[2]/div[3]/div[1]/span/text()').extract_first()
             item['date'] = response.xpath('//*[@id="contFix"]/div/div[2]/div[3]/div[1]/time/text()').extract_first()
             item['content'] = response.xpath('//*[@id="Content1"]').extract_first()
-            print(item)
+            return item
         except IndexError:
             pass
