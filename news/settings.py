@@ -89,7 +89,8 @@ ITEM_PIPELINES = {
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-#Mysql数据库的配置信息
+FEED_EXPORT_ENCODING = 'utf-8'
+
 MYSQL_HOST = '127.0.0.1'
 MYSQL_DBNAME = 'python'
 MYSQL_USER = 'root'
