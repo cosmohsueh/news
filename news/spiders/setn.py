@@ -49,6 +49,8 @@ class SetnSpider(scrapy.Spider):
             item['author'] = response.xpath('//*[@id="contFix"]/div/div[2]/div[3]/div[1]/span/text()').extract_first()
             item['date'] = response.xpath('//*[@id="contFix"]/div/div[2]/div[3]/div[1]/time/text()').extract_first()
             item['content'] = response.xpath('//*[@id="Content1"]').extract_first()
+            item['channel'] = '三立'
+            item['url'] = response.request.url
             return item
         except IndexError:
             pass

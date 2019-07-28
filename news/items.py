@@ -9,9 +9,11 @@ import scrapy
 
 
 class NewsItem(scrapy.Item):
+    id =  scrapy.Field()
     title = scrapy.Field()
     author = scrapy.Field()
     date = scrapy.Field()
-    push = scrapy.Field()
     url = scrapy.Field()
     content = scrapy.Field()
+    channel = scrapy.Field()
+    insert_date = scrapy.Field()

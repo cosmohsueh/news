@@ -50,6 +50,7 @@ class MoneydjSpider(scrapy.Spider):
             item['author'] = response.xpath('//div[@id="highlight"]/article/p/text()').extract_first()
             item['date'] = response.xpath('//span[@id="MainContent_Contents_lbDate"]/text()').extract_first()
             item['content'] = response.xpath('//div[@id="highlight"]/article/text()').extract()
+            item['channel'] = '理財網'
             return item
         except IndexError:
             pass
