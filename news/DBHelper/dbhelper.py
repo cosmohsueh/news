@@ -2,7 +2,7 @@ import pymysql
 from scrapy.utils.project import get_project_settings
 from twisted.enterprise import adbapi
 import time
-import uuid
+
 
 class DBHelper():
 
@@ -27,18 +27,30 @@ class DBHelper():
 
     def insert(self, item):
         sql = "INSERT INTO NEWS(ID, TITLE, CONTENT, CHANNEL, URL, PUBLISH_DATE, INSERT_DATE, REPORTER) " \
-              "values(%s, %s, %s, %s, %s, %s, %s, %s)"
+              "VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
         query = self.dbpool.runInteraction(self._conditional_insert, sql, item)
         query.addErrback(self._handle_error)
 
         return item
 
+    def insert_jieba(self, item):
+        sql = "INSERT INTO JIEBA(ID, JSON)" \
+                "VALUES(%s, %s)"
+        query = self.dbpool.runInteraction(self._conditional_jieba_insert, sql, item)
+        query.addErrback(self._handle_error)
+
+        return item
+
     def _conditional_insert(self, tx, sql, item):
-        item['id'] = str(uuid.uuid4())
+
         item['insert_date'] = time.strftime('%Y-%m-%d %H:%M:%S',
                                            time.localtime(time.time()))
         params = (item["id"], item["title"], item['content'], item['channel'],
                   item['url'], item['date'], item['insert_date'], item['author'])
+        tx.execute(sql, params)
+
+    def _conditional_jieba_insert(self, tx, sql, item):
+        params = (item['id'], item['json'])
         tx.execute(sql, params)
 
     def _handle_error(self, failue):
